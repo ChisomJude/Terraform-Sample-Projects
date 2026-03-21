@@ -1,8 +1,6 @@
 module "vpc" {
   source = "./modules/vpc"
-
-
-  vpc_name             = "demo-vpc"
+   vpc_name             = "${var.vpc_name}-${terraform.workspace}"
   vpc_cidr             = "10.0.0.0/16"
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnet_cidrs = ["10.0.10.0/24", "10.0.20.0/24"]
@@ -13,7 +11,7 @@ module "vpc" {
 #added ec2
 # ---------- SECURITY GROUP ----------
 resource "aws_security_group" "web" {
-  name        = "${var.vpc_name}-web-sg"
+  name        = "${var.vpc_name}-${terraform.workspace}-web-sg"
   description = "Allow HTTP and SSH"
   vpc_id      = module.vpc.vpc_id
 
@@ -41,7 +39,7 @@ resource "aws_security_group" "web" {
   }
 
   tags = {
-    Name        = "${var.vpc_name}-web-sg"
+    Name        = "${var.vpc_name}-${terraform.workspace}-web-sg"
     Environment = var.environment
   }
 }
@@ -83,7 +81,7 @@ resource "aws_instance" "web" {
     #!/bin/bash
     yum update -y
     yum install -y httpd
-    echo "<h1>Hello from ${var.environment} - $(hostname)</h1>" > /var/www/html/index.html
+    echo "<h1>Hello from ${terraform.workspace} - $(hostname)</h1>" > /var/www/html/index.html
     systemctl start httpd
     systemctl enable httpd
   EOF

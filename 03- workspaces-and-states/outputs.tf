@@ -15,7 +15,8 @@ output "private_subnet_ids" {
 
 output "environment" {
   description = "Current environment"
-  value       = var.environment
+  #value       = var.environment
+  value       = terraform.workspace
 }
 
 output "ec2_public_ip" {

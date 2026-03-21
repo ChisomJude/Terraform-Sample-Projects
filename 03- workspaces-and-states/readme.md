@@ -11,7 +11,7 @@ Same .tf files
     └── prod workspace →  prod state →  prod VPC + prod EC2
 ```
 
-### Step 2.1 — Create environment-specific variable files
+### Step 1.1 — Create environment-specific variable files
  
 Create **dev.tfvars** in the project root:
  
@@ -47,9 +47,9 @@ Key differences between dev and prod:
 | Instance type | t2.micro | t2.small |
 | Subnet CIDRs | 10.0.x.x | 10.1.x.x |
  
-### Step 2.2 — Make the code workspace-aware
+### Step 1.2 — Make the code workspace-aware
 Let introduce the `${terraform.workspace}` variable in our naming
-Open the **root `main.tf`**. Replace theline 5 witht the line commented out:
+Open the **root `main.tf`**. Replace the line 3,14,42 and 84  with the line commented out:
  
 ```hcl
 module "vpc" {
@@ -111,7 +111,7 @@ output "environment" {
 }
 ```
  
-### Step 2.3 — Create workspaces and deploy dev
+### Step 1.3 — Create workspaces and deploy dev
  
 ```bash
 # See current workspace
@@ -125,10 +125,7 @@ terraform workspace new prod
 # Output: Created and switched to workspace "dev"!
 
 terraform workspace select dev
-```
-### Create or duplicate your tfvars to `dev.tfvars` and `prod.tfvars` 
 
-```bash
 # Deploy dev
 terraform plan -var-file=dev.tfvars
 terraform apply -var-file=dev.tfvars
